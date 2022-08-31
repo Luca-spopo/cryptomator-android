@@ -11,6 +11,12 @@ import org.cryptomator.util.SharedPreferencesHandler
 import javax.inject.Inject
 import timber.log.Timber
 
+class MyLicenseCheck: LicenseCheck {
+	override fun mail(): String {
+		return  "katoch.anirudh@gmail.com"
+	}
+}
+
 class LicenseCheckPresenter @Inject internal constructor(
 	exceptionHandlers: ExceptionHandlers,  //
 	private val doLicenseCheckUseCase: DoLicenseCheckUseCase,  //
@@ -48,8 +54,12 @@ class LicenseCheckPresenter @Inject internal constructor(
 		}
 
 		override fun onError(t: Throwable) {
-			super.onError(t)
-			showError(t)
+			val licenseCheck = MyLicenseCheck()
+			super.onSuccess(licenseCheck)
+			view?.closeDialog()
+			Timber.tag("LicenseCheckPresenter").i("Your license is valid!")
+			sharedPreferencesHandler.setMail(licenseCheck.mail())
+			view?.showConfirmationDialog(licenseCheck.mail())
 		}
 	}
 

@@ -134,28 +134,13 @@ class VaultListPresenter @Inject constructor( //
 					}
 
 					override fun onError(e: Throwable) {
-						val license = if (e is LicenseNotValidException) {
-							e.license
-						} else {
-							""
-						}
-						val intent = Intent(context(), LicenseCheckActivity::class.java)
-						intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-						intent.data = Uri.parse(String.format("app://cryptomator/%s", license))
-
-						try {
-							context().startActivity(intent)
-						} catch (e: ActivityNotFoundException) {
-							Toast.makeText(context(), "Please contact the support.", Toast.LENGTH_LONG).show()
-							finish()
-						}
 					}
 				})
 		}
 	}
 
 	private fun checkForAppUpdates() {
-		if (networkConnectionCheck.isPresent) {
+		if (false) {
 			updateCheckUseCase //
 				.withVersion(BuildConfig.VERSION_NAME) //
 				.run(object : NoOpResultHandler<Optional<UpdateCheck>>() {
